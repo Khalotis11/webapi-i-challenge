@@ -38,6 +38,26 @@ server.post("/api/users", (req, res) => {
     });
 });
 
+//Delete
+server.delete("/api/users/:id", (req, res) => {
+  const { id } = req.params;
+  db.remove(id)
+    .then(deletedUser => {
+      if (deletedUser) {
+        res.json(deletedUser);
+      } else {
+        res.status(404).json({
+          message: "OOOOOPS, Invalid User Id"
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: "The user with the specified ID does not exist."
+      });
+    });
+});
+
 server.listen(3333, () => {
   console.log("Server is running on port 3333...");
 });
