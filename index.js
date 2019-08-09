@@ -5,7 +5,6 @@ const express = require("express");
 const db = require("./data/db.js");
 //Global objects
 const server = express();
-
 //middleware
 server.use(express.json());
 //Request handlers:
@@ -18,6 +17,7 @@ server.get("/api/users", (req, res) => {
     })
     .catch(err => {
       res.status(500).json({
+        err: err,
         err: "The users information could not be retrieved."
       });
     });
@@ -33,6 +33,7 @@ server.post("/api/users", (req, res) => {
     })
     .catch(err => {
       res.status(500).json({
+        err: err,
         errorMessage: "Please provide name and bio for the user."
       });
     });
@@ -53,7 +54,29 @@ server.delete("/api/users/:id", (req, res) => {
     })
     .catch(err => {
       res.status(500).json({
+        err: err,
         message: "The user with the specified ID does not exist."
+      });
+    });
+});
+
+/// GET USERS WITH SPECIFIED ID - api/users/:id
+server.get("/api/users/:id", (req, res) => {
+  const { id } = req.params;
+  db.findById(id)
+    .then(users => {
+      if (users) {
+        res.json(users);
+      } else {
+        res.status(404).json({
+          message: "The user with the specified ID does not exist."
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({
+        err: err,
+        message: "Doesn't exist please try again later!"
       });
     });
 });
