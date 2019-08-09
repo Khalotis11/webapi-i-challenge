@@ -7,8 +7,8 @@ const db = require("./data/db.js");
 const server = express();
 //middleware
 server.use(express.json());
-//Request handlers:
 
+//Request handlers:
 //GET
 server.get("/api/users", (req, res) => {
   db.find()
